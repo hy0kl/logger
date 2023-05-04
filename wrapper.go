@@ -10,7 +10,7 @@ func init() {
 	stdBuilder.hostName, _ = os.Hostname()
 }
 
-func NewConfig() *Config {
+func DefaultConf() *Config {
 	config := new(Config)
 	//存储路径
 	config.FileName = "./logs/app.log"
@@ -34,7 +34,7 @@ func NewConfig() *Config {
 	return config
 }
 
-//自定义config Init
+// InitWithConfig 自定义config Init
 func InitWithConfig(config *Config) {
 	if config.FileName == "" {
 		_, _ = fmt.Fprintf(os.Stderr, "InitLoggerConfig: Error: config could not found logpath %s\n", config.FileName)

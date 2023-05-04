@@ -30,10 +30,6 @@ type zapBuilder struct {
 	logWriter *lumberjack.Logger
 }
 
-func NewZapBuilder(logger *zap.Logger) *zapBuilder {
-	return &zapBuilder{zapLogger: logger}
-}
-
 func (log *zapBuilder) LoadConfig(config *Config) {
 	var lvl zapcore.Level
 	switch config.Level {
@@ -74,7 +70,6 @@ func (log *zapBuilder) LoadConfig(config *Config) {
 		zap.String("x_env", log.env),
 		zap.String("x_name", log.name),
 		zap.String("x_version", log.version),
-		zap.String("x_department", log.department),
 		zap.String("x_server_ip", log.serverIp),
 		zap.String("x_hostname", log.hostName),
 	), zap.AddCallerSkip(2))
@@ -109,9 +104,6 @@ func (log *zapBuilder) LoggerX(ctx context.Context, lvl string, tag string, mess
 
 func (log *zapBuilder) Sync() error {
 	err := log.zapLogger.Sync()
-	//if log.logWriter != nil {
-	//	log.logWriter.Rotate()
-	//}
 
 	return err
 }

@@ -4,24 +4,6 @@ import (
 	"context"
 )
 
-type Builder interface {
-	LoadConfig(config *Config)
-
-	SetVersion(version string)
-
-	SetDepartment(department string)
-
-	SetName(name string)
-
-	SetEnv(env string)
-
-	LoggerX(ctx context.Context, lvl string, tag string, message string, fields ...string)
-
-	Build(ctx context.Context) (expand []interface{})
-
-	Sync() error
-}
-
 var stdBuilder = new(zapBuilder)
 
 func SetEnv(env string) {
@@ -34,10 +16,6 @@ func SetName(name string) {
 
 func SetVersion(version string) {
 	stdBuilder.SetVersion(version)
-}
-
-func SetDepartment(department string) {
-	stdBuilder.SetDepartment(department)
 }
 
 func Sync() error {

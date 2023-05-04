@@ -12,12 +12,11 @@ import (
 )
 
 type builder struct {
-	env        string
-	name       string
-	version    string
-	department string
-	hostName   string
-	serverIp   string
+	env      string
+	name     string
+	version  string
+	hostName string
+	serverIp string
 }
 
 func (t *builder) SetEnv(env string) {
@@ -30,10 +29,6 @@ func (t *builder) SetName(name string) {
 
 func (t *builder) SetVersion(version string) {
 	t.version = version
-}
-
-func (t *builder) SetDepartment(department string) {
-	t.department = department
 }
 
 func (t *builder) LoadConfig(config *Config) {
@@ -79,7 +74,7 @@ func (t *builder) Build(ctx context.Context) (expand []interface{}) {
 	}
 	expand = []interface{}{
 		"x_trace_id", traceId,
-		"x_timestamp", time.Now().UnixNano() / 1e6,
+		"x_timestamp", time.Now().UnixMilli(),
 		"x_duration", duration,
 	}
 

@@ -45,7 +45,6 @@ func main(){
         // 设置环境信息
     	logger.SetEnv("gray")
     	logger.SetName("testLogger")
-    	logger.SetDepartment("udcXiaoNeng")
     	logger.SetVersion("logger-v1.0.0")
     	logConfig := NewConfig().SetConfigMap(cfgMap)
     
