@@ -32,34 +32,46 @@ compress = true
 ### 初始化
 
 ```go
+package main
+
 import (
-    "github.com/hy0kl/gconfig"
+	"context"
+	"time"
+	
     "github.com/hy0kl/logger"
 )
 
 func main(){
-    
-        // 准备日志配置参数
-        cfgMap := gconfig.GetConfStringMap("Log")
-    
-        // 设置环境信息
-    	logger.SetEnv("gray")
-    	logger.SetName("testLogger")
-    	logger.SetVersion("logger-v1.0.0")
-    	logConfig := NewConfig().SetConfigMap(cfgMap)
-    
-        // 初始化日志对象
-    	logger.InitWithConfig(logConfig)    
-    	defer logger.Sync()
-    
-        // 记录错误日志
-        // 前3个参数必传：上下文, 日志标签, 日志正文
-    	logger.Ex(ctx, "logTag", "我是一条日志....")
+    cfgMap := map[string]string{
+        "fileName": `./app.log`,
+        "console":  "true",
+        "level":    "DEBUG",
+        "maxSize":  "200",
+        "maxAge":   "0",
+        "format":   "json",
+    }
+        
+    // 设置环境信息
+    logger.SetEnv("gray")
+    logger.SetName("testLogger")
+    logger.SetVersion("logger-v1.0.0")
+    logConfig := logger.DefaultConf().SetConfigMap(cfgMap)
+
+    // 初始化日志对象
+    logger.InitWithConfig(logConfig)    
+    defer logger.Sync()
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "request_time", time.Now())
+	
+    // 记录错误日志
+    // 前3个参数必传：上下文, 日志标签, 日志正文
+    logger.Ix(ctx, "testTag", "我是一条测试日志.... %v, %v, %v, %v", "age", 30, "box", "Tom")
 }
 ```
 
 ### 日志内容示例
 
 ```json
-{"x_level":"info","@timestamp":"2021-11-11T18:07:04.664+0800","x_caller":"/Users/tal/yangyj/logger/logger_test.go:36","x_msg":"我是一条测试日志.... age, 30, box, Tom","x_env":"dev","x_name":"testLogger","x_version":"api:0.0.1","x_department":"r&d","x_server_ip":"10.25.190.61","x_hostname":"workdev","x_trace_id":"886ab55c-5186-42f8-8fbf-12d08b59792e","x_timestamp":1636625224664,"x_duration":"1.001359083s","x_tag":"testTag"}
+{"x_level":"info","@timestamp":"2023-05-04T10:53:48.054+0800","x_caller":"/Users/tal/yangyj/logger/logger_test.go:36","x_msg":"我是一条测试日志.... age, 30, box, Tom","x_env":"dev","x_name":"testLogger","x_version":"api:0.0.1","x_server_ip":"10.29.116.85","x_hostname":"workdev","x_trace_id":"01f29462-8619-4c64-8af1-dc4f315a4de7","x_timestamp":1683168828054,"x_duration":"1.001063083s","x_tag":"testTag"}
 ```
